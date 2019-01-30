@@ -1,0 +1,5 @@
+include 'eureca-service'
+include 'discovery-service'
+include 'user-service'
+include 'equipment-service'
+
