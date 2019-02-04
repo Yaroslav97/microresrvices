@@ -3,8 +3,9 @@
 /discovery-service/out/
 /equipment-service/out/
 /eureca-service/out/
-/user-service/out/
+/employee-service/out/
+
+/employee-service/build/
 /discovery-service/build/
 /equipment-service/build/
 /eureca-service/build/
-/user-service/build/
