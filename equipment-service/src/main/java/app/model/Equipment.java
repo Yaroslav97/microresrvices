@@ -19,7 +19,7 @@ public class Equipment {
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
     private String name;
     private Integer count;
     private Long reporterID;

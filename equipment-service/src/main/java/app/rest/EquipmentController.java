@@ -8,10 +8,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -40,10 +40,10 @@ public class EquipmentController {
             @ApiResponse(code = 200, message = "Successfully obtained"),
             @ApiResponse(code = 500, message = "Error")
     })
-    @RequestMapping(value = "/equipment/{id}", method = RequestMethod.GET)
-    public Optional<Equipment> getEquipment(@RequestAttribute Long id) {
+    @RequestMapping(value = "/equipment", method = RequestMethod.GET)
+    public Optional<Equipment> getEquipment(@RequestParam Long id) {
         log.info("Equipment get: {}", id);
-       return equipmentService.getEquipment(id);
+        return equipmentService.getEquipment(id);
     }
 
 }
