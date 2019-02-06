@@ -68,4 +68,15 @@ public class EmployeeController {
         return employeeService.getEmployeeEquipmentByID(id);
     }
 
+    @ApiOperation(value = "Save employee`s equipment")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully obtained"),
+            @ApiResponse(code = 500, message = "Error")
+    })
+    @RequestMapping(value = "/employee/equipment", method = RequestMethod.POST)
+    public void saveEmployeeEquipment(@RequestBody Equipment equipment) {
+        log.info("Save user`s equipment");
+        employeeService.saveUserEquipment(equipment);
+    }
+
 }
