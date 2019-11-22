@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@RequestMapping("v1")
 @Api(value = "EmployeeController", description = "Employee rest controller")
 public class EmployeeController {
 
