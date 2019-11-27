@@ -17,10 +17,16 @@ ext {
     set('springCloudVersion', "Hoxton.RC2")
 }
 
+def swaggerVersion = '2.9.2'
+
 dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
+
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: "$swaggerVersion"
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "$swaggerVersion"
+    compile group: 'io.springfox', name: 'springfox-bean-validators', version: "$swaggerVersion"
 
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 

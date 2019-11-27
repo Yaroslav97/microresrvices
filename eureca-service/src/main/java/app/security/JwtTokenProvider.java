@@ -23,10 +23,13 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtTokenProvider {
-    private static final String AUTH="auth";
-    private static final String AUTHORIZATION="Authorization";
-    private String secretKey="secret-key";
+
+    private static final String AUTH = "auth";
+    private static final String AUTHORIZATION = "Authorization";
+
     private long validityInMilliseconds = TimeUnit.HOURS.toMillis(1);
+
+    private String secretKey = "secret-key";
 
     @Autowired
     private JwtTokenRepository jwtTokenRepository;
@@ -42,54 +45,63 @@ public class JwtTokenProvider {
     public String createToken(String username, List<String> roles) {
 
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put(AUTH,roles);
+        claims.put(AUTH, roles);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-        String token =  Jwts.builder()//
-                .setClaims(claims)//
-                .setIssuedAt(now)//
-                .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, secretKey)//
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+
         jwtTokenRepository.save(new JwtToken(token));
+
         return token;
     }
 
-    public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader(AUTHORIZATION);
+    public String resolveToken(HttpServletRequest request) {
+
+        String bearerToken = request.getHeader(AUTHORIZATION);
+
         /*if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }*/
-        if (bearerToken != null ) {
+
+        if (bearerToken != null) {
             return bearerToken;
         }
+
         return null;
     }
 
-    public boolean validateToken(String token) throws JwtException,IllegalArgumentException{
+    public boolean validateToken(String token) throws JwtException, IllegalArgumentException {
         Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         return true;
     }
-    public boolean isTokenPresentInDB (String token) {
+
+    public boolean isTokenPresentInDB(String token) {
         return jwtTokenRepository.findById(token).isPresent();
     }
-    //user details with out database hit
+
     public UserDetails getUserDetails(String token) {
-        String userName =  getUsername(token);
+
+        String userName = getUsername(token);
         List<String> roleList = getRoleList(token);
-        UserDetails userDetails = new MongoUserDetails(userName,roleList.toArray(new String[roleList.size()]));
-        return userDetails;
+
+        return new MongoUserDetails(userName, roleList.toArray(new String[roleList.size()]));
     }
+
     public List<String> getRoleList(String token) {
-        return (List<String>) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).
-                getBody().get(AUTH);
+        return (List<String>) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(AUTH);
     }
 
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
+
     public Authentication getAuthentication(String token) {
         //using data base: uncomment when you want to fetch data from data base
         //UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));

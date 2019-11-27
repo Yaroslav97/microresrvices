@@ -1,9 +1,10 @@
-package app.controller;
+package app.rest;
 
 import app.dto.auth.AuthResponse;
 import app.dto.auth.LoginRequest;
 import app.dto.auth.User;
 import app.service.LoginService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Api
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -52,12 +54,12 @@ public class AuthenticationController {
     }
 
     @CrossOrigin("*")
-    @PostMapping("/signUp")
-    public void signUp(@RequestBody User user) {
+    @PostMapping("/signup")
+    public ResponseEntity<Object> signUp(@RequestBody User user) {
 
         loginService.saveUser(user);
 
-        log.info("User {} signed up", user.getEmail());
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @CrossOrigin("*")
